@@ -90,7 +90,7 @@
 	</NavBrand>
 </Navbar>
 
-<div class="m-20">
+<div class="m-5">
 	<TableSearch bind:inputValue={searchTerm} hoverable={true} placeholder="Search by any field">
 		<Table class="divide-y" striped={true} hoverable={true}>
 			<caption
@@ -102,6 +102,9 @@
 				</p>
 				<p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
 					Click any row to see more details.
+				</p>
+				<p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
+					Click any heading to sort.
 				</p>
 			</caption>
 			<TableHead>
