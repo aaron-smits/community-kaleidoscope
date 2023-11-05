@@ -91,7 +91,7 @@
 </Navbar>
 
 <div class="m-5">
-	<TableSearch bind:inputValue={searchTerm} hoverable={true} placeholder="Search by any field">
+	<TableSearch bind:inputValue={searchTerm} hoverable={true} noborder={true} placeholder="Search by any field">
 		<Table class="divide-y" striped={true} hoverable={true}>
 			<caption
 				class="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800"
