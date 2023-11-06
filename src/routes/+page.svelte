@@ -2,18 +2,7 @@
 	import { onMount } from 'svelte'
 	import { writable } from 'svelte/store'
 	import Navbar from '$lib/components/Navbar.svelte'
-	import {
-		Table,
-		TableBody,
-		TableBodyCell,
-		TableBodyRow,
-		TableHead,
-		TableHeadCell,
-		Button,
-		Badge,
-		TableSearch,
-		Pagination,
-	} from 'flowbite-svelte'
+	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button, Badge, TableSearch, Pagination } from 'flowbite-svelte'
 	import { ArrowLeftOutline, ArrowRightOutline, CalendarMonthSolid, DollarSolid, MapLocationOutline } from 'flowbite-svelte-icons'
 	import { slide } from 'svelte/transition'
 
@@ -42,23 +31,22 @@
 		pagination.total = response.total
 	})
 	const prev = async () => {
-		if (page > 1) {
-			page--
-			const params = new URLSearchParams({
-				limit: '10',
-				offset: (page - 1).toString()
-			})
-			let response = await fetch('api/events' + '?' + params.toString(), {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			}).then((res) => res.json())
-			items = response.events
-			pagination.total = response.total
-			pagination.start = pagination.start - response.events.length
-			pagination.end = pagination.end - response.events.length
-		}
+		if (page <= 0) return
+		page--
+		const params = new URLSearchParams({
+			limit: '10',
+			offset: (page - 1).toString()
+		})
+		let response = await fetch('api/events' + '?' + params.toString(), {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then((res) => res.json())
+		items = response.events
+		pagination.total = response.total
+		pagination.start = page * 10 + 1
+		pagination.end = Math.min((page + 1) * 10, pagination.total)
 	}
 	const next = async () => {
 		if (pagination.end >= pagination.total) return
@@ -75,8 +63,8 @@
 		}).then((res) => res.json())
 		items = response.events
 		pagination.total = response.total
-		pagination.start = pagination.start + response.events.length
-		pagination.end = pagination.end + response.events.length
+		pagination.start = page * 10 + 1
+		pagination.end = Math.min((page + 1) * 10, pagination.total)
 	}
 	const sortKey = writable('date')
 	const sortDirection = writable(1)
@@ -160,7 +148,15 @@
 			<TableSearch bind:inputValue={searchTerm} hoverable={true} placeholder="Search" />
 		</div>
 	</div>
-	<div class="m-1">
+	<div class="m-1 pb-24">
+		<div class="mx-auto text-sm text-gray-700 dark:text-gray-200 align-middle right-0 left-0">
+			Showing <span class="font-semibold text-gray-900 dark:text-white">{pagination.start}</span>
+			to
+			<span class="font-semibold text-gray-900 dark:text-white">{pagination.end}</span>
+			of
+			<span class="font-semibold text-gray-900 dark:text-white">{pagination.total}</span>
+			Entries
+		</div>
 		<Table shadow={true}>
 			<TableHead class="!whitespace-normal hidden md:table-header-group lg:table-header-group">
 				<TableHeadCell class="!w-32 !whitespace-normal hidden md:table-cell  lg:table-cell" on:click={() => sortTable('date')}>Date</TableHeadCell>
@@ -176,31 +172,30 @@
 					</TableBodyRow>
 					{#if openRow === i}
 						<TableBodyRow on:click={() => (details = item)}>
-							<TableBodyCell colspan="3" class="p-1 m-1">
+							<TableBodyCell colspan="3" class="p-1 m-1" on:click={() => toggleRow(i)}>
 								<div class="px-10 py-5" transition:slide={{ duration: 500, axis: 'y' }}>
 									<div class="text-2xl flex justify-between leading-relaxed text-gray-500 dark:text-gray-200 m-2 whitespace-pre-wrap py-2">
 										<div>{item.title}</div>
 									</div>
-									<Badge class="self-start px-2"color="primary">{item.type}</Badge>
+									<Badge class="self-start px-2" color="primary">{item.type}</Badge>
 									<div class="py-4 text-lg flex leading-relaxed text-gray-500 dark:text-gray-200">
 										<div class="pr-3"><CalendarMonthSolid /></div>
-										<div>{new Date(item.date).toLocaleDateString(
-											'en-US',
-											{
+										<div>
+											{new Date(item.date).toLocaleDateString('en-US', {
 												year: 'numeric',
 												month: 'long',
-												day: 'numeric',
-											}
-										)}</div>
+												day: 'numeric'
+											})}
+										</div>
 									</div>
 									<div class="text-lg flex leading-relaxed text-gray-500 dark:text-gray-200">
 										<div class="pr-3"><MapLocationOutline /></div>
 										<div>{item.location}</div>
 									</div>
 									{#if item.cost}
-									<div class="text-base flex leading-relaxed text-gray-500 dark:text-gray-200">
-										<div class="pr-3"><DollarSolid /> </div>
-										<div>{item.cost}</div>
+										<div class="text-base flex leading-relaxed text-gray-500 dark:text-gray-200">
+											<div class="pr-3"><DollarSolid /></div>
+											<div>{item.cost}</div>
 										</div>
 									{/if}
 									<div class="text-lg leading-relaxed text-gray-500 dark:text-gray-200 m-30 whitespace-pre-wrap py-2">
@@ -211,11 +206,11 @@
 										<Button color="purple">
 											<a href={item ? item.source : ''} target="_blank">Source</a>
 										</Button>
-									{#if item.externalLink}
-										<Button>
-											<a href={item ? item.externalLink : ''} target="_blank">More Information</a>
-										</Button>
-									{/if}
+										{#if item.externalLink}
+											<Button>
+												<a href={item ? item.externalLink : ''} target="_blank">More Information</a>
+											</Button>
+										{/if}
 									</div>
 								</div></TableBodyCell
 							>
@@ -225,16 +220,7 @@
 			</TableBody>
 		</Table>
 	</div>
-	<div class="flex flex-col items-center justify-center gap-2 pb-10">
-		<div class="text-sm text-gray-700 dark:text-gray-200">
-			Showing <span class="font-semibold text-gray-900 dark:text-white">{pagination.start}</span>
-			to
-			<span class="font-semibold text-gray-900 dark:text-white">{pagination.end}</span>
-			of
-			<span class="font-semibold text-gray-900 dark:text-white">{pagination.total}</span>
-			Entries
-		</div>
-
+	<div class="flex flex-col items-center justify-center gap-2 pb-10 left-0 right-0 mx-auto fixed bottom-2 mb-2">
 		<Pagination class="text-white dark:text-gray-400">
 			<div
 				slot="prev"
