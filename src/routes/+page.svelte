@@ -3,7 +3,7 @@
 	import { writable } from 'svelte/store'
 	import Navbar from '$lib/components/Navbar.svelte'
 	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell, Button, Badge, TableSearch, Pagination } from 'flowbite-svelte'
-	import { ArrowLeftOutline, ArrowRightOutline, CalendarMonthSolid, DollarSolid, MapLocationOutline } from 'flowbite-svelte-icons'
+	import { AnnotationSolid, ArrowLeftOutline, ArrowRightOutline, CalendarMonthSolid, DollarSolid, MapLocationOutline } from 'flowbite-svelte-icons'
 	import { slide } from 'svelte/transition'
 
 	/**
@@ -148,7 +148,7 @@
 			<TableSearch bind:inputValue={searchTerm} hoverable={true} placeholder="Search" />
 		</div>
 	</div>
-	<div class="m-1 pt-2 pb-10">
+	<div class="m-1 pt-2 pb-16">
 		<div class="mx-auto text-sm text-gray-700 dark:text-gray-200 mb-1">
 			Showing <span class="font-semibold text-gray-900 dark:text-white">{pagination.start}</span>
 			to
@@ -172,13 +172,13 @@
 					</TableBodyRow>
 					{#if openRow === i}
 						<TableBodyRow on:click={() => (details = item)}>
-							<TableBodyCell colspan="3" class="p-1 m-1" on:click={() => toggleRow(i)}>
+							<TableBodyCell colspan="3" class="p-1 whitespace-pre-wrap" on:click={() => toggleRow(i)}>
 								<div class="px-10 py-5" transition:slide={{ duration: 500, axis: 'y' }}>
 									<div class="text-2xl leading-relaxed text-gray-700 dark:text-gray-200 whitespace-pre-wrap py-2">
 										<div>{item.title}</div>
 									</div>
-									<Badge class="self-start px-2" color="primary">{item.type}</Badge>
-									<div class="py-4 text-lg flex leading-relaxed text-gray-700 dark:text-gray-200">
+									<div id="details container" class="flex flex-col justify-start">
+									<div class="py-2 text-lg flex align-baseline leading-relaxed text-gray-700 dark:text-gray-200">
 										<div class="pr-3"><CalendarMonthSolid /></div>
 										<div>
 											{new Date(item.date).toLocaleDateString('en-US', {
@@ -188,16 +188,20 @@
 											})}
 										</div>
 									</div>
-									<div class="text-lg flex leading-relaxed text-gray-700 dark:text-gray-200">
+									<div class="py-2 text-lg flex align-baseline leading-relaxed text-gray-700 dark:text-gray-200">
 										<div class="pr-3"><MapLocationOutline /></div>
 										<div>{item.location}</div>
 									</div>
 									{#if item.cost}
-										<div class="text-base flex leading-relaxed text-gray-700 dark:text-gray-200">
-											<div class="pr-3"><DollarSolid /></div>
-											<div>{item.cost}</div>
-										</div>
+									<div class="py-2 text-base flex align-middle leading-relaxed text-gray-700 dark:text-gray-200">
+										<div class="pr-3 flex"><DollarSolid /></div>
+										<div>{item.cost}</div>
+									</div>
 									{/if}
+									<div class="py-2 text-lg flex align-baseline leading-relaxed text-gray-700 dark:text-gray-200">
+										<div class="pr-3"><AnnotationSolid /></div>
+										<Badge class="self-start" color="primary">{item.type}</Badge>
+									</div>
 									<div class="text-lg leading-relaxed text-gray-700 dark:text-gray-200 m-30 whitespace-pre-wrap py-2">
 										{item ? item.desc : ''}
 									</div>
