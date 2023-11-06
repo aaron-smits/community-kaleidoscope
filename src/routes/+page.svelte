@@ -148,7 +148,7 @@
 			<TableSearch bind:inputValue={searchTerm} hoverable={true} placeholder="Search" />
 		</div>
 	</div>
-	<div class="m-1 pt-2 pb-24">
+	<div class="m-1 pt-2 pb-10">
 		<div class="mx-auto text-sm text-gray-700 dark:text-gray-200 mb-1">
 			Showing <span class="font-semibold text-gray-900 dark:text-white">{pagination.start}</span>
 			to
@@ -220,7 +220,7 @@
 			</TableBody>
 		</Table>
 	</div>
-	<div class="flex flex-col items-center justify-center gap-2 pb-10 left-0 right-0 mx-auto fixed bottom-0">
+	<div class="flex flex-col items-center justify-center gap-2 pb-3 left-0 right-0 mx-auto fixed bottom-0">
 		<Pagination class="text-white dark:text-gray-400">
 			<div
 				slot="prev"
