@@ -5,7 +5,6 @@ export default {
 		adapter: adapter({}),
 		csp: {
 			directives: {
-				"script-src": ["self"],
 				"connect-src": ["self", "vitals.vercel-insights.com"],
 			}
 		}
