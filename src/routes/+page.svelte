@@ -155,7 +155,7 @@
 		<p class="m-2 text-sm font-normal text-center text-gray-500 dark:text-gray-200">
 			Browse a list of upcoming events in our community. Click any row to see more details. Click any heading to sort.
 		</p>
-		<div class="flex justify-center mx-auto">
+		<div class="flex justify-center align-center mx-auto">
 			<TableSearch bind:inputValue={searchTerm} hoverable={true} placeholder="Search" />
 		</div>
 	</div>
@@ -175,9 +175,9 @@
 					</TableBodyRow>
 					{#if openRow === i}
 						<TableBodyRow on:click={() => (details = item)}>
-							<TableBodyCell colspan="3" class="p-1 m-30">
+							<TableBodyCell colspan="3" class="p-1 m-1">
 								<div class="px-10 py-5" transition:slide={{ duration: 500, axis: 'y' }}>
-									<div class="text-2xl flex justify-between leading-relaxed text-gray-500 dark:text-gray-200 m-30 whitespace-pre-wrap py-2">
+									<div class="text-2xl flex justify-between leading-relaxed text-gray-500 dark:text-gray-200 m-2 whitespace-pre-wrap py-2">
 										<div>{item.title}</div>
 									</div>
 									<Badge class="self-start px-2"color="primary">{item.type}</Badge>
