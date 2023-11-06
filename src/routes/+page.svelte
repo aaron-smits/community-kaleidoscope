@@ -9,17 +9,21 @@
 	/**
 	 * @type {any}
 	 */
+	let LIMIT = 10
+
 	let items = []
 	let page = 1
 	let pagination = {
 		start: 1,
-		end: 10,
-		total: 0
+		end: LIMIT,
+		total: null
 	}
-	onMount(async () => {
+
+	async function fetchEvents(page) {
+		const offset = page
 		const params = new URLSearchParams({
-			limit: '10',
-			offset: (page - 1).toString()
+			limit: LIMIT.toString(),
+			offset: offset.toString()
 		})
 		let response = await fetch('api/events' + '?' + params.toString(), {
 			method: 'GET',
@@ -29,42 +33,26 @@
 		}).then((res) => res.json())
 		items = response.events
 		pagination.total = response.total
-	})
-	const prev = async () => {
-		if (page <= 0) return
+		// the start is the total number of items from each page before out of the total
+		// ie: if we are on page 2, the start is 11. If we are on page 3, the start is 21
+		pagination.start = (page - 1) * LIMIT + 1
+		// End will be the start + the number of items on the page, unless we are on the last page
+		pagination.end = page * LIMIT > pagination.total ? pagination.total : page * LIMIT
+	}
+
+	onMount(() => fetchEvents(page))
+
+	const prev = () => {
+		if (page <= 1) return
 		page--
-		const params = new URLSearchParams({
-			limit: '10',
-			offset: (page - 1).toString()
-		})
-		let response = await fetch('api/events' + '?' + params.toString(), {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}).then((res) => res.json())
-		items = response.events
-		pagination.total = response.total
-		pagination.start = page * 10 + 1
-		pagination.end = Math.min((page + 1) * 10, pagination.total)
+		fetchEvents(page)
 	}
-	const next = async () => {
-		if (pagination.end >= pagination.total) return
+
+	const next = () => {
+		const totalPages = Math.ceil(pagination.total / LIMIT)
+		if (page >= totalPages) return
 		page++
-		const params = new URLSearchParams({
-			limit: '10',
-			offset: (page + 1).toString()
-		})
-		let response = await fetch('api/events' + '?' + params.toString(), {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}).then((res) => res.json())
-		items = response.events
-		pagination.total = response.total
-		pagination.start = page * 10 + 1
-		pagination.end = Math.min((page + 1) * 10, pagination.total)
+		fetchEvents(page)
 	}
 	const sortKey = writable('date')
 	const sortDirection = writable(1)
@@ -84,7 +72,7 @@
 	 * @type {any[]}
 	 */
 	let filteredItems = []
-	let searchTerm = ''
+	let searchTerm
 
 	$: {
 		if (searchTerm) {
@@ -140,7 +128,7 @@
 <Navbar />
 <body class="lg:m-10">
 	<div id="table-head">
-		<div class="py-2 text-4xl font-bold text-center text-gray-900 bg-white dark:text-white dark:bg-gray-800">Events</div>
+		<div class="pb-2 text-4xl font-bold text-center text-gray-900 bg-white dark:text-white dark:bg-gray-800">Events</div>
 		<p class="m-2 text-sm font-normal text-center text-gray-700 dark:text-gray-200">
 			Browse a list of upcoming events in our community. Click any row to see more details. Click any heading to sort.
 		</p>
@@ -178,43 +166,44 @@
 										<div>{item.title}</div>
 									</div>
 									<div id="details container" class="flex flex-col justify-start">
-									<div class="py-2 text-lg flex align-baseline leading-relaxed text-gray-700 dark:text-gray-200">
-										<div class="pr-3"><CalendarMonthSolid /></div>
-										<div>
-											{new Date(item.date).toLocaleDateString('en-US', {
-												year: 'numeric',
-												month: 'long',
-												day: 'numeric'
-											})}
+										<div class="py-2 text-lg flex align-baseline leading-relaxed text-gray-700 dark:text-gray-200">
+											<div class="pr-3"><CalendarMonthSolid /></div>
+											<div>
+												{new Date(item.date).toLocaleDateString('en-US', {
+													year: 'numeric',
+													month: 'long',
+													day: 'numeric'
+												})}
+											</div>
 										</div>
-									</div>
-									<div class="py-2 text-lg flex align-baseline leading-relaxed text-gray-700 dark:text-gray-200">
-										<div class="pr-3"><MapLocationOutline /></div>
-										<div>{item.location}</div>
-									</div>
-									{#if item.cost}
-									<div class="py-2 text-base flex align-middle leading-relaxed text-gray-700 dark:text-gray-200">
-										<div class="pr-3 flex"><DollarSolid /></div>
-										<div>{item.cost}</div>
-									</div>
-									{/if}
-									<div class="py-2 text-lg flex align-baseline leading-relaxed text-gray-700 dark:text-gray-200">
-										<div class="pr-3"><AnnotationSolid /></div>
-										<Badge class="self-start" color="primary">{item.type}</Badge>
-									</div>
-									<div class="text-lg leading-relaxed text-gray-700 dark:text-gray-200 m-30 whitespace-pre-wrap py-2">
-										{item ? item.desc : ''}
-									</div>
-
-									<div class="space-x-5 py-2">
-										<Button color="purple">
-											<a href={item ? item.source : ''} target="_blank">Source</a>
-										</Button>
-										{#if item.externalLink}
-											<Button>
-												<a href={item ? item.externalLink : ''} target="_blank">More Information</a>
-											</Button>
+										<div class="py-2 text-lg flex align-baseline leading-relaxed text-gray-700 dark:text-gray-200">
+											<div class="pr-3"><MapLocationOutline /></div>
+											<div>{item.location}</div>
+										</div>
+										{#if item.cost}
+											<div class="py-2 text-base flex align-middle leading-relaxed text-gray-700 dark:text-gray-200">
+												<div class="pr-3 flex"><DollarSolid /></div>
+												<div>{item.cost}</div>
+											</div>
 										{/if}
+										<div class="py-2 text-lg flex align-baseline leading-relaxed text-gray-700 dark:text-gray-200">
+											<div class="pr-3"><AnnotationSolid /></div>
+											<Badge class="self-start" color="primary">{item.type}</Badge>
+										</div>
+										<div class="text-lg leading-relaxed text-gray-700 dark:text-gray-200 m-30 whitespace-pre-wrap py-2">
+											{item ? item.desc : ''}
+										</div>
+
+										<div class="space-x-5 py-2">
+											<Button color="purple">
+												<a href={item ? item.source : ''} target="_blank">Source</a>
+											</Button>
+											{#if item.externalLink}
+												<Button>
+													<a href={item ? item.externalLink : ''} target="_blank">More Information</a>
+												</Button>
+											{/if}
+										</div>
 									</div>
 								</div></TableBodyCell
 							>
