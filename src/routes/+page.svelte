@@ -126,7 +126,7 @@
 </script>
 
 <Navbar />
-<body class="lg:m-10">
+<body class="lg:m-10 bg-inherit	">
 	<div id="table-head">
 		<div class="pb-2 text-4xl font-bold text-center text-gray-900 bg-white dark:text-white dark:bg-gray-800">Events</div>
 		<p class="m-2 text-sm font-normal text-center text-gray-700 dark:text-gray-200">
