@@ -5,13 +5,29 @@
 	import TableCaption from '$lib/components/TableCaption.svelte'
 	import EventTable from '$lib/components/EventTable.svelte'
 	import TablePagination from '$lib/components/TablePagination.svelte'
+	
 
+	// @ts-ignore
+	let events = []
+	// ****************** Pagination ******************
 	let page = 1
-	let items = []
 	let total = 0
 	let limit = 10
 	let start = 0
 	let end = 0
+	// ****************** Sort ******************
+	const sortKey = writable('date')
+	const sortDirection = writable(1)
+	// ****************** Search ******************
+	/**
+	 * @type {any[]}
+	 */
+	 let filteredItems = []
+	/**
+	 * @type {string}
+	 */
+	let search
+
 	/**
 	 * @param {number} page
 	 */
@@ -27,7 +43,7 @@
 				'Content-Type': 'application/json'
 			}
 		}).then((res) => res.json())
-		items = response.events
+		events = response.events
 		total = response.total
 		// the start is the total number of items from each page before out of the total
 		// ie: if we are on page 2, the start is 11. If we are on page 3, the start is 21
@@ -37,6 +53,7 @@
 	}
 
 	onMount(() => fetchEvents(page))
+	// @ts-ignore
 	function handlePageChange(event) {
 		let newPage = event.detail
 		const totalPages = Math.ceil(total / limit)
@@ -49,8 +66,7 @@
 		page = newPage
 		fetchEvents(page)
 	}
-	const sortKey = writable('date')
-	const sortDirection = writable(1)
+
 	/**
 	 * @param {any} key
 	 */
@@ -62,17 +78,9 @@
 			sortDirection.set(1)
 		}
 	}
-	// ****************** Search ******************
-	/**
-	 * @type {any[]}
-	 */
-	let filteredItems = []
-	/**
-	 * @type {string}
-	 */
-	let search
 
-	$: {
+// @ts-ignore
+		$: {
 		if (search) {
 			const term = search.toLowerCase()
 			const params = new URLSearchParams({
@@ -95,11 +103,13 @@
 						end = res.total > 10 ? 10 : res.total
 					}))()
 		} else {
-			filteredItems = items
+			// @ts-ignore
+			filteredItems = events
 		}
 	}
 	// ****************** Sort ******************
-	$: {
+// @ts-ignore
+		$: {
 		const key = $sortKey
 		const direction = $sortDirection
 		filteredItems = [...filteredItems].sort((a, b) => {
@@ -127,4 +137,3 @@
 <TableCaption bind:searchTerm={search} />
 <EventTable {details} {filteredItems} {sortTable} {toggleRow} {openRow} />
 <TablePagination on:pageChange={handlePageChange} {page} {start} {end} {limit} {total} />
-```
