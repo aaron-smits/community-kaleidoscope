@@ -141,15 +141,15 @@
 <body class="lg:m-10">
 	<div id="table-head">
 		<div class="py-2 text-4xl font-bold text-center text-gray-900 bg-white dark:text-white dark:bg-gray-800">Events</div>
-		<p class="m-2 text-sm font-normal text-center text-gray-500 dark:text-gray-200">
+		<p class="m-2 text-sm font-normal text-center text-gray-700 dark:text-gray-200">
 			Browse a list of upcoming events in our community. Click any row to see more details. Click any heading to sort.
 		</p>
 		<div class="flex justify-center align-center mx-auto">
 			<TableSearch bind:inputValue={searchTerm} hoverable={true} placeholder="Search" />
 		</div>
 	</div>
-	<div class="m-1 pb-24">
-		<div class="mx-auto text-sm text-gray-700 dark:text-gray-200 align-middle right-0 left-0">
+	<div class="m-1 pt-2 pb-24">
+		<div class="mx-auto text-sm text-gray-700 dark:text-gray-200 mb-1">
 			Showing <span class="font-semibold text-gray-900 dark:text-white">{pagination.start}</span>
 			to
 			<span class="font-semibold text-gray-900 dark:text-white">{pagination.end}</span>
@@ -174,11 +174,11 @@
 						<TableBodyRow on:click={() => (details = item)}>
 							<TableBodyCell colspan="3" class="p-1 m-1" on:click={() => toggleRow(i)}>
 								<div class="px-10 py-5" transition:slide={{ duration: 500, axis: 'y' }}>
-									<div class="text-2xl flex justify-between leading-relaxed text-gray-500 dark:text-gray-200 m-2 whitespace-pre-wrap py-2">
+									<div class="text-2xl leading-relaxed text-gray-700 dark:text-gray-200 whitespace-pre-wrap py-2">
 										<div>{item.title}</div>
 									</div>
 									<Badge class="self-start px-2" color="primary">{item.type}</Badge>
-									<div class="py-4 text-lg flex leading-relaxed text-gray-500 dark:text-gray-200">
+									<div class="py-4 text-lg flex leading-relaxed text-gray-700 dark:text-gray-200">
 										<div class="pr-3"><CalendarMonthSolid /></div>
 										<div>
 											{new Date(item.date).toLocaleDateString('en-US', {
@@ -188,17 +188,17 @@
 											})}
 										</div>
 									</div>
-									<div class="text-lg flex leading-relaxed text-gray-500 dark:text-gray-200">
+									<div class="text-lg flex leading-relaxed text-gray-700 dark:text-gray-200">
 										<div class="pr-3"><MapLocationOutline /></div>
 										<div>{item.location}</div>
 									</div>
 									{#if item.cost}
-										<div class="text-base flex leading-relaxed text-gray-500 dark:text-gray-200">
+										<div class="text-base flex leading-relaxed text-gray-700 dark:text-gray-200">
 											<div class="pr-3"><DollarSolid /></div>
 											<div>{item.cost}</div>
 										</div>
 									{/if}
-									<div class="text-lg leading-relaxed text-gray-500 dark:text-gray-200 m-30 whitespace-pre-wrap py-2">
+									<div class="text-lg leading-relaxed text-gray-700 dark:text-gray-200 m-30 whitespace-pre-wrap py-2">
 										{item ? item.desc : ''}
 									</div>
 
