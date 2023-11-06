@@ -56,8 +56,8 @@
 			}).then((res) => res.json())
 			items = response.events
 			pagination.total = response.total
-			pagination.start = pagination.start - 10
-			pagination.end = pagination.end - 10
+			pagination.start = pagination.start - response.events.length
+			pagination.end = pagination.end - response.events.length
 		}
 	}
 	const next = async () => {
@@ -75,8 +75,8 @@
 		}).then((res) => res.json())
 		items = response.events
 		pagination.total = response.total
-		pagination.start = pagination.start + 10
-		pagination.end = pagination.end + 10
+		pagination.start = pagination.start + response.events.length
+		pagination.end = pagination.end + response.events.length
 	}
 	const sortKey = writable('date')
 	const sortDirection = writable(1)
