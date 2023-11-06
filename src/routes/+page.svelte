@@ -220,7 +220,7 @@
 			</TableBody>
 		</Table>
 	</div>
-	<div class="flex flex-col items-center justify-center gap-2 pb-10 left-0 right-0 mx-auto fixed bottom-2 mb-2">
+	<div class="flex flex-col items-center justify-center gap-2 pb-10 left-0 right-0 mx-auto fixed bottom-0">
 		<Pagination class="text-white dark:text-gray-400">
 			<div
 				slot="prev"
