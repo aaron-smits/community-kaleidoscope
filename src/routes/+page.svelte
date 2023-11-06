@@ -155,7 +155,7 @@
 		<p class="m-2 text-sm font-normal text-center text-gray-500 dark:text-gray-200">
 			Browse a list of upcoming events in our community. Click any row to see more details. Click any heading to sort.
 		</p>
-		<div class="flex justify-normal mx-auto align-middle">
+		<div class="flex justify-center mx-auto">
 			<TableSearch bind:inputValue={searchTerm} hoverable={true} placeholder="Search" />
 		</div>
 	</div>
