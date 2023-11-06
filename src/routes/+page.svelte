@@ -61,6 +61,7 @@
 		}
 	}
 	const next = async () => {
+		if (pagination.end >= pagination.total) return
 		page++
 		const params = new URLSearchParams({
 			limit: '10',
