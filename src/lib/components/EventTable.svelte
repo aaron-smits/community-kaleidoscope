@@ -1,8 +1,5 @@
 <script>
 	import { Table, TableHead, TableHeadCell, TableBody, TableBodyRow, TableBodyCell, Spinner } from 'flowbite-svelte'
-	import { AnnotationSolid, ArrowLeftOutline, ArrowRightOutline, CalendarMonthSolid, DollarSolid, MapLocationOutline } from 'flowbite-svelte-icons'
-	import { slide } from 'svelte/transition'
-	import { Badge, Button, Pagination, TableSearch } from 'flowbite-svelte'
 	import ExpandoRow from './Expando-Row.svelte'
 
 	export let details = null
