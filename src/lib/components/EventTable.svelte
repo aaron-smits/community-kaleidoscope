@@ -1,5 +1,5 @@
 <script>
-	import { Table, TableHead, TableHeadCell, TableBody, TableBodyRow, TableBodyCell } from 'flowbite-svelte'
+	import { Table, TableHead, TableHeadCell, TableBody, TableBodyRow, TableBodyCell, Spinner } from 'flowbite-svelte'
 	import { AnnotationSolid, ArrowLeftOutline, ArrowRightOutline, CalendarMonthSolid, DollarSolid, MapLocationOutline } from 'flowbite-svelte-icons'
 	import { slide } from 'svelte/transition'
 	import { Badge, Button, Pagination, TableSearch } from 'flowbite-svelte'
@@ -24,7 +24,11 @@
 	 */
 	export let openRow = null
 </script>
-
+{#if filteredItems.length === 0}
+<div class="flex justify-center">
+	<Spinner class="mx-auto" />
+</div>
+{/if}
 <Table shadow={true} class="pb-10">
 	<TableHead class="!whitespace-normal hidden md:table-header-group lg:table-header-group">
 		<TableHeadCell class="w-32 !whitespace-normal hidden md:table-cell  lg:table-cell" on:click={() => sortTable('date')}>Date</TableHeadCell>
