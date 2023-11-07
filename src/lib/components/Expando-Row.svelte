@@ -57,7 +57,7 @@
                     {item ? item.desc : ''}
                 </div>
 
-                <div class="space-x-5 py-2">
+                <div class="space-y-2 sm:space-y-0 sm:space-x-2 py-2 flex flex-col sm:flex-row">
                     <Button color="purple">
                         <a href={item ? item.source : ''} target="_blank">Source</a>
                     </Button>
@@ -68,6 +68,6 @@
                     {/if}
                 </div>
             </div>
-        </div></TableBodyCell
-    >
+        </div>
+        </TableBodyCell>
 </TableBodyRow>

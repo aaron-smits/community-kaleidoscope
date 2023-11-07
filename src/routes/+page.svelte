@@ -135,5 +135,7 @@
 
 <Navbar />
 <TableCaption bind:searchTerm={search} />
+<div class="pb-20">
 <EventTable {details} {filteredItems} {sortTable} {toggleRow} {openRow} />
+</div>
 <TablePagination on:pageChange={handlePageChange} {page} {start} {end} {limit} {total} />

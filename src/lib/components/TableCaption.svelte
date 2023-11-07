@@ -4,7 +4,7 @@
     export let searchTerm = '';
 </script>
 
-<div id="table-caption" class="py-1 mx-1 text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+<div id="table-caption" class="py-1 mx-6 text-gray-900 bg-white dark:text-white dark:bg-gray-800">
     <div class="py-1 text-4xl font-bold">Events</div>
     <div class="py-1 text-sm font-normal">
         Browse a list of upcoming events in our community. Click any row to see more details. Click any heading to sort.
